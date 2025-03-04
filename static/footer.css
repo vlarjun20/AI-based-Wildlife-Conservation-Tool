@@ -1,0 +1,17 @@
+/* Footer styling */
+footer {
+    
+    text-align: center;
+    padding: 16px;
+    background-color: #1F1F1F; /* Dark gray for footer */
+    color: #B0BEC5; /* Light gray for text */
+    margin-top: 24px;
+    box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+footer p {
+    font-size: 0.9rem;
+}
+body{
+    background-color: #121212;
+}

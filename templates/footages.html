@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Care</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='footages.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+</head>
+<body>
+    <header>
+        <!-- Logo Section -->
+        <div class="logo" onclick="navigateTo('HOME.html')">
+            <img src="/fox-icon.png" alt="Logo">
+            <h1 class="logo-title">WILD CARE</h1>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav>
+            <ul>
+                <li><a href="LOG.html">LOGS</a></li>
+                <li><a href="detectedvideo.html">FOOTAGES</a></li>
+                <li><a href="Analysis.html">ANALYSIS</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="footages-container">
+        <h1>Footages</h1>
+
+        <div class="search-filters">
+            <div>
+                <label for="search-date">Search by Date:</label>
+                <input type="date" id="search-date">
+            </div>
+            <div>
+                <label for="search-month">Search by Month:</label>
+                <input type="month" id="search-month">
+            </div>
+        </div>
+
+        <div id="video-list" class="video-list"></div>
+
+        <div id="video-player" class="video-player" style="display: none;">
+            <h2 id="video-title"></h2>
+            <video id="video-element" controls>
+                <source id="video-source" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="main-content">
+            <!-- Your page content here -->
+        </div>
+        <footer>
+            <p>&copy; 2025 Your Company. All rights reserved.</p>
+        </footer>
+    </div>
+    
+
+    <script>
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+        const sampleVideos = [
+    { id: 'video1', title: 'Sample Video 1', url: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4', date: '2025-02-25' },
+    { id: 'video2', title: 'Sample Video 2', url: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4', date: '2025-02-26' },
+];
+
+const videoList = document.getElementById("video-list");
+const videoPlayer = document.getElementById("video-player");
+const videoTitle = document.getElementById("video-title");
+const videoElement = document.getElementById("video-element");
+const videoSource = document.getElementById("video-source");
+const searchDateInput = document.getElementById("search-date");
+const searchMonthInput = document.getElementById("search-month");
+
+// Function to display videos
+function displayVideos(videos) {
+    videoList.innerHTML = "";
+    videos.forEach(video => {
+        const videoItem = document.createElement("div");
+        videoItem.classList.add("video-item");
+        videoItem.innerHTML = `
+            <h3>${video.title}</h3>
+            <p>${new Date(video.date).toLocaleDateString()}</p>
+            <button onclick="playVideo('${video.url}', '${video.title}')">Play Video</button>
+        `;
+        videoList.appendChild(videoItem);
+    });
+}
+
+// Function to play selected video
+function playVideo(url, title) {
+    videoTitle.innerText = `Now Playing: ${title}`;
+    videoSource.src = url;
+    videoElement.load();
+    videoPlayer.style.display = "block";
+}
+
+// Function to filter videos
+function filterVideos() {
+    const searchDate = searchDateInput.value;
+    const searchMonth = searchMonthInput.value;
+
+    const filteredVideos = sampleVideos.filter(video => {
+        const videoDate = new Date(video.date);
+        const searchDateObj = searchDate ? new Date(searchDate) : null;
+        const searchMonthObj = searchMonth ? new Date(searchMonth) : null;
+
+        const matchesDate = searchDateObj
+            ? videoDate.toDateString() === searchDateObj.toDateString()
+            : true;
+
+        const matchesMonth = searchMonthObj
+            ? videoDate.getMonth() === searchMonthObj.getMonth() &&
+              videoDate.getFullYear() === searchMonthObj.getFullYear()
+            : true;
+
+        return matchesDate && matchesMonth;
+    });
+
+    displayVideos(filteredVideos);
+}
+
+// Event listeners for filters
+searchDateInput.addEventListener("change", filterVideos);
+searchMonthInput.addEventListener("change", filterVideos);
+
+// Initial display of all videos
+displayVideos(sampleVideos);
+
+        </script>
+</body>
+</html>
