@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+</head>
+<body>
+    <header>
+        <!-- Logo Section -->
+         <!-- Logo Section -->
+    <div class="logo" onclick="navigateTo('HOME.html')">
+        <img src="{{ url_for('static', filename='Images/fox.png') }}" alt="Wild Care Logo">
+        <h1 class="logo-title">WILD CARE</h1>
+      </div>
+
+        <!-- Navigation Links -->
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('logs') }}">LOGS</a></li>
+                <li><a href="{{ url_for('footages') }}">FOOTAGES</a></li>
+
+                <li><a href="{{ url_for('analysis') }}">ANALYSIS</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="detection-page">
+        <h1>Live Human Detection</h1>
+        <div class="video-container">
+            <!-- Live video feed using Flask's video_feed route -->
+            <img src="{{ url_for('video_feed') }}" alt="Live Video Feed" style="width:50%; height:auto;" id="camera_feed">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="main-content">
+            <!-- Additional page content if needed -->
+        </div>
+        <footer>
+            <p>&copy; 2025 Your Company. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

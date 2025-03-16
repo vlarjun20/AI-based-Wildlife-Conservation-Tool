@@ -1,0 +1,84 @@
+/* Main container */
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #9fed83; /* Dark background */
+    padding: 20px;
+}
+
+/* Camera video box */
+.video-box {
+    width: 640px;
+    height: 480px;
+    border: 2px solid #333; /* Darker border for subtlety */
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #000; /* Pure black background for video */
+}
+
+.video-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detection-page {
+    text-align: center; /* Center text inside the div */
+}
+
+.video-container img {
+    max-width: 100%; /* Ensure the image doesn't overflow */
+    height: auto; /* Maintain aspect ratio */
+}
+/* Detection title */
+.detection-title {
+    margin-top: 30px; /* Space between video and title */
+    margin-bottom: 20px; /* Space between title and sections */
+    font-size: 24px;
+    color: #E0E0E0; /* Light gray for better readability */
+}
+
+/* Section wrapper for Logs, Footages, Analysis */
+.section-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    gap: 18px;
+}
+
+/* Individual sections */
+.section {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    color: #FFFFFF; /* White text for contrast */
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.section:hover {
+    transform: translateY(-5px);
+}
+
+/* Section colors */
+.logs-section {
+    background-color: #1E88E5; /* Muted blue */
+}
+
+.footages-section {
+    background-color: #43A047; /* Muted green */
+}
+
+.analysis-section {
+    background-color: #E53935; /* Muted red */
+}
+body{
+    background-color: #121212;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Care - Footages</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='footages.css') }}">
+</head>
+<body>
+    <header>
+        <!-- Logo Section -->
+        <div class="logo" onclick="navigateTo('HOME.html')">
+            <img src="{{ url_for('static', filename='Images/fox.png') }}" alt="Wild Care Logo">
+            <h1 class="logo-title">WILD CARE</h1>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('logs') }}">LOGS</a></li>
+                <li><a href="{{ url_for('footages') }}">FOOTAGES</a></li>
+                <li><a href="{{ url_for('analysis') }}">ANALYSIS</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h1>Saved Footages</h1>
+
+    <!-- Date filter -->
+    <div class="date-filter">
+        <label for="filter-date">Filter by Date:</label>
+        <input type="date" id="filter-date" onchange="filterVideosByDate()">
+    </div>
+
+    <!-- Video list -->
+    <div class="video-list">
+        {% if videos %}
+            {% for video in videos %}
+                <div class="video-item">
+                    <h2>{{ video }}</h2>
+                    <video width="400" controls>
+                        <source src="{{ url_for('static', filename='footages/' + video) }}" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No videos found for the selected date.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function filterVideosByDate() {
+            const selectedDate = document.getElementById("filter-date").value;
+            if (selectedDate) {
+                window.location.href = `/footages?date=${selectedDate}`;
+            } else {
+                window.location.href = `/footages`;  // Show all videos if no date selected
+            }
+        }
+    </script>
+</body>
+</html>
