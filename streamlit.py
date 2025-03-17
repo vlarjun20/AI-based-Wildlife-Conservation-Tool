@@ -140,7 +140,7 @@ if menu == "Live Detection":
                 description_logged = False  
 
             # Stop detection button
-            if st.sidebar.button("Stop Detection",key="stop_btn"):
+            if st.sidebar.button("Stop Detection"):
                 cap.release()
                 st.success("Detection Stopped.")
                 break

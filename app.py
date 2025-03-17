@@ -120,6 +120,9 @@ def detection_logs():
 def detect_objects():
     try:
         cap = cv2.VideoCapture(0)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
         if not cap.isOpened():
             logger.error("Failed to open webcam.")
             return
