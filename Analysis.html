@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WILD CARE</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='Analysis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+</head>
+<body>
+
+  <header>
+    <!-- Logo Section -->
+    <div class="logo" onclick="navigateTo('HOME.html')">
+      <img src="{{ url_for('static', filename='Images/fox.png') }}" alt="Wild Care Logo">
+      <h1 class="logo-title">WILD CARE</h1>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav>
+      <ul>
+          <li><a href="{{ url_for('logs') }}">LOGS</a></li>
+          <li><a href="{{ url_for('footages') }}">FOOTAGES</a></li>
+
+          <li><a href="{{ url_for('analysis') }}">ANALYSIS</a></li>
+      </ul>
+  </nav>
+  </header>
+
+  <div class="analysis-container">
+    <h1>Detection Analysis</h1>
+    <div class="search-filters">
+      <div>
+        <label for="search-date">Search by Date:</label>
+        <input type="date" id="search-date" />
+      </div>
+      <div>
+        <label for="search-month">Search by Month:</label>
+        <input type="month" id="search-month" />
+      </div>
+      <div>
+        <label for="search-year">Search by Year:</label>
+        <input type="number" id="search-year" min="2000" max="2100" />
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="chartCanvas"></canvas>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="main-content">
+      <!-- Your page content here -->
+    </div>
+    <footer>
+      <p>&copy; 2025 Your Company. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let chart;
+    let detectionLogs = [];
+
+    // Fetch detection logs from the Flask API
+    async function fetchLogs() {
+      try {
+        const response = await fetch('/api/detection_logs');
+        detectionLogs = await response.json();
+        createChart(detectionLogs); // Initialize chart with the logs data
+      } catch (error) {
+        console.error('Error fetching detection logs:', error);
+      }
+    }
+
+    // Create the chart
+    function createChart(filteredData) {
+  const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  const labels = filteredData.map(entry => entry.date);
+  const data = filteredData.map(entry => 1); // Each detection = 1
+
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Detections',
+        data: data,
+        borderColor: '#4bc0c0',
+        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+        fill: true,
+        tension: 0.5, // Smoothness
+        cubicInterpolationMode: 'monotone', // Dynamic smooth curve
+        pointRadius: 0, // Hide individual points
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      animation: {
+        duration: 1000,
+        easing: 'easeInOutQuart'
+      },
+      plugins: {
+        tooltip: {
+          enabled: true,
+        },
+        legend: {
+          display: true,
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Date'
+          },
+          type: 'category',
+          labels: labels,
+          ticks: {
+            maxRotation: 60,
+            minRotation: 30
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Detections'
+          },
+          min: 0,
+          ticks: {
+            precision: 0
+          }
+        }
+      }
+    }
+  });
+}
+
+
+    // Filter logs by date, month, or year
+    function filterData() {
+      const searchDate = document.getElementById('search-date').value;
+      const searchMonth = document.getElementById('search-month').value;
+      const searchYear = document.getElementById('search-year').value;
+
+      const filteredData = detectionLogs.filter((entry) => {
+        const entryDate = new Date(entry.date);
+        const searchDateObj = searchDate ? new Date(searchDate) : null;
+        const searchMonthObj = searchMonth ? new Date(searchMonth) : null;
+        const searchYearValue = searchYear ? parseInt(searchYear, 10) : null;
+
+        const matchesDate = searchDateObj ? entryDate.toDateString() === searchDateObj.toDateString() : true;
+        const matchesMonth = searchMonthObj
+          ? entryDate.getMonth() === searchMonthObj.getMonth() &&
+            entryDate.getFullYear() === searchMonthObj.getFullYear()
+          : true;
+        const matchesYear = searchYearValue ? entryDate.getFullYear() === searchYearValue : true;
+
+        return matchesDate && matchesMonth && matchesYear;
+      });
+
+      createChart(filteredData);
+    }
+
+    // Add event listeners to inputs
+    document.getElementById('search-date').addEventListener('input', filterData);
+    document.getElementById('search-month').addEventListener('input', filterData);
+    document.getElementById('search-year').addEventListener('input', filterData);
+
+    // Fetch logs on page load
+    fetchLogs();
+  </script>
+</body>
+</html>
